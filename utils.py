@@ -10,3 +10,10 @@ def split_data(data, split_ratio=0.67):
     train = [data[i] for i in indices]
     test = [data[i] for i in range(size) if i not in indices]
     return train, test
+
+def gen_labels(data):
+    data = np.array(data)
+    size = data.shape[1] - 1
+    labels = data[:,-1]
+    data = data[:,:size]
+    return data, labels
