@@ -61,6 +61,42 @@ def gaussian(x, mean, stddev):
 
 def probabilities(datapoint, parameters):
     probs = {}
-    
+    for K in parameters.keys():
+        p = 1
+        for param in parameters[K]:
+            mean, stddev = param
+            p *= gaussian(datapoint[K], mean, stddev)
+        probs[K] = p
+    return probs
+
+"""
+Prediction and accuracy like normal.
+"""
+
+def predict(dataset, parameters):
+    predictions = []
+    for point in dataset:
+        prob = probabilities(point, parameters)
+        prob = np.array(list(prob.values()))
+        pred = np.argmax(prob)
+        predictions.append(pred)
+    return predictions
+
+def accuracy(dataset, labels, parameters):
+    predicts = predict(dataset, parameters)
+    correct = 0
+    for i in range(len(labels)):
+        if labels[i] == predicts[i]:
+            correct += 1
+    accuracy = 100 * (correct / len(labels))
+    print("Accuracy of it was %.02f%%" % accuracy)
+
+"""
+Run tests!
+"""
+print("===== Training set =====")
+accuracy(train_data, train_labels, params)
+print("===== Testing set =====")
+accuracy(test_data, test_labels, params)
 
 
